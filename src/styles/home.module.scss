@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    width: 320px;
+    margin: 2rem auto;
+}
+
+.input{
+    margin-bottom: .24rem;
+    height: 32px;
+    padding-left: 1rem;
+}
+
+.registerButton{
+    height: 40px;
+    cursor: pointer;
+}
