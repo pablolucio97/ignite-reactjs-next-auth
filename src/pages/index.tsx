@@ -1,13 +1,16 @@
 import { FormEvent, useState } from 'react'
 import styles from '../styles/home.module.scss'
-import {useSignIn} from '../context/AuthContex'
+import { useSignIn } from '../context/AuthContex'
+import { GetServerSideProps } from 'next'
+import { parseCookies } from 'nookies'
+import { withSSRGuest } from '../utils/withSSRGuest'
 
 export default function Home() {
 
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
-  const {signIn} = useSignIn()
+  const { signIn } = useSignIn()
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -19,6 +22,7 @@ export default function Home() {
     signIn(newUser)
 
   }
+
 
   return (
     <form
@@ -46,3 +50,12 @@ export default function Home() {
     </form>
   )
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {
+      
+    }
+  }
+}
+)

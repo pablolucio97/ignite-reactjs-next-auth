@@ -1,8 +1,17 @@
+import { GetStaticProps } from 'next'
+import { useEffect } from 'react'
 import { useSignIn } from '../context/AuthContex'
+import { setupAPIClient } from '../services/api'
+import { api } from '../services/apiClient'
+import { withSSRAuth } from '../utils/withSSRAuth'
 
 export default function Dashboard() {
 
     const {isAuthenticated, user} = useSignIn()
+
+    useEffect(() => {
+        api.get('/me').then(response => console.log(response))
+    }, [])
 
     return (
         <>
@@ -11,3 +20,15 @@ export default function Dashboard() {
         </>
     )
 }
+
+export const getServerSideProps = withSSRAuth( async (ctx) => {
+
+    const apiClient = setupAPIClient(ctx)
+    const response = await api.get('/me')
+
+    return{
+        props:{
+
+        }
+    }
+})
