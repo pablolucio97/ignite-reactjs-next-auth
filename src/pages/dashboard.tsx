@@ -1,4 +1,3 @@
-import { GetStaticProps } from 'next'
 import { useEffect } from 'react'
 import { useSignIn } from '../context/AuthContex'
 import { setupAPIClient } from '../services/api'
@@ -25,6 +24,7 @@ export const getServerSideProps = withSSRAuth( async (ctx) => {
 
     const apiClient = setupAPIClient(ctx)
     const response = await api.get('/me')
+    console.log(response.data)
 
     return{
         props:{

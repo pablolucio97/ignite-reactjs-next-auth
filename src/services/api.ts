@@ -1,6 +1,7 @@
 import axios, { AxiosError, Axios } from 'axios'
 import { parseCookies, setCookie } from 'nookies'
 import { signOut } from '../context/AuthContex'
+import { AuthTokenAError } from '../errors/AuthTokenError'
 
 let isRefreshing = false
 let failedRequestsQueue = []
@@ -22,7 +23,7 @@ export function setupAPIClient(ctx = undefined) {
       if (error.response.data?.code === 'token.expired') {
         cookies = parseCookies(ctx)
 
-        const { 'dashgo.refreshToken': refreshToken } = cookies
+        const { 'nextauth.refreshToken': refreshToken } = cookies
         const originalConfig = error.config
 
         if (!isRefreshing) {
@@ -33,12 +34,12 @@ export function setupAPIClient(ctx = undefined) {
           }).then(response => {
             const { token } = response.data
 
-            setCookie(ctx, 'dashgo.token', token, {
+            setCookie(ctx, 'nextauth.token', token, {
               maxAge: 60 * 60 * 24 * 30, // 30 days
               path: '/',
             })
 
-            setCookie(ctx, 'dashgo.refreshToken', response.data.refreshToken, {
+            setCookie(ctx, 'nextauth.refreshToken', response.data.refreshToken, {
               maxAge: 60 * 60 * 24 * 30, // 30 days
               path: '/',
             })
@@ -81,5 +82,5 @@ export function setupAPIClient(ctx = undefined) {
     return Promise.reject(error)
   })
 
-  return setupAPIClient
+  return apiAuth
 }
